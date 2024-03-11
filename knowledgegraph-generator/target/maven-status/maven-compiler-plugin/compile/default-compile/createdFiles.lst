@@ -1,0 +1,13 @@
+com\knowledgegraph\generator\mapper\GenTableMapper.class
+com\knowledgegraph\generator\util\VelocityInitializer.class
+com\knowledgegraph\generator\config\GenConfig.class
+com\knowledgegraph\generator\mapper\GenTableColumnMapper.class
+com\knowledgegraph\generator\service\IGenTableColumnService.class
+com\knowledgegraph\generator\util\VelocityUtils.class
+com\knowledgegraph\generator\controller\GenController.class
+com\knowledgegraph\generator\service\IGenTableService.class
+com\knowledgegraph\generator\domain\GenTable.class
+com\knowledgegraph\generator\util\GenUtils.class
+com\knowledgegraph\generator\domain\GenTableColumn.class
+com\knowledgegraph\generator\service\GenTableServiceImpl.class
+com\knowledgegraph\generator\service\GenTableColumnServiceImpl.class

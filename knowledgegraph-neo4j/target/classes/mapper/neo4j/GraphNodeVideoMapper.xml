@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowledgegraph.neo4j.mapper.GraphNodeVideoMapper">
+    
+    <resultMap type="GraphNodeVideo" id="GraphNodeVideoResult">
+        <result property="graphNodeVideoKey"    column="graph_node_video_key"    />
+        <result property="graphNodeKey"    column="graph_node_key"    />
+        <result property="graphNodeVideoRemark"    column="graph_node_video_remark"    />
+        <result property="graphNodeVideoUrl"    column="graph_node_video_url"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createName"    column="createName"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="upadteTime"    column="upadte_time"    />
+    </resultMap>
+
+    <sql id="selectGraphNodeVideoVo">
+        SELECT
+            A.graph_node_video_key,
+            A.graph_node_key,
+            A.graph_node_video_remark,
+            A.graph_node_video_url,
+            A.create_by,
+            B.nick_name AS createName ,
+            A.create_time,
+            A.update_by,
+            A.upadte_time
+        FROM
+            graph_node_video A
+                LEFT JOIN sys_user B ON A.create_by = B.user_id
+    </sql>
+
+    <select id="selectGraphNodeVideoList" parameterType="GraphNodeVideo" resultMap="GraphNodeVideoResult">
+        <include refid="selectGraphNodeVideoVo"/>
+        <where>  
+            <if test="graphNodeVideoRemark != null  and graphNodeVideoRemark != ''"> and A.graph_node_video_remark like concat('%', #{graphNodeVideoRemark}, '%')</if>
+            <if test="graphNodeKey != null  and graphNodeKey != ''"> and A.graph_node_key like concat('%', #{graphNodeKey}, '%')</if>
+        </where>
+        ORDER BY A.create_time DESC
+    </select>
+    
+    <select id="selectGraphNodeVideoByGraphNodeVideoKey" parameterType="String" resultMap="GraphNodeVideoResult">
+        <include refid="selectGraphNodeVideoVo"/>
+        where A.graph_node_video_key = #{graphNodeVideoKey}
+    </select>
+        
+    <insert id="insertGraphNodeVideo" parameterType="GraphNodeVideo">
+        insert into graph_node_video
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="graphNodeVideoKey != null">graph_node_video_key,</if>
+            <if test="graphNodeKey != null">graph_node_key,</if>
+            <if test="graphNodeVideoRemark != null">graph_node_video_remark,</if>
+            <if test="graphNodeVideoUrl != null">graph_node_video_url,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="upadteTime != null">upadte_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="graphNodeVideoKey != null">#{graphNodeVideoKey},</if>
+            <if test="graphNodeKey != null">#{graphNodeKey},</if>
+            <if test="graphNodeVideoRemark != null">#{graphNodeVideoRemark},</if>
+            <if test="graphNodeVideoUrl != null">#{graphNodeVideoUrl},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="upadteTime != null">#{upadteTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGraphNodeVideo" parameterType="GraphNodeVideo">
+        update graph_node_video
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="graphNodeKey != null">graph_node_key = #{graphNodeKey},</if>
+            <if test="graphNodeVideoRemark != null">graph_node_video_remark = #{graphNodeVideoRemark},</if>
+            <if test="graphNodeVideoUrl != null">graph_node_video_url = #{graphNodeVideoUrl},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="upadteTime != null">upadte_time = #{upadteTime},</if>
+        </trim>
+        where graph_node_video_key = #{graphNodeVideoKey}
+    </update>
+
+    <delete id="deleteGraphNodeVideoByGraphNodeVideoKey" parameterType="String">
+        delete from graph_node_video where graph_node_video_key = #{graphNodeVideoKey}
+    </delete>
+
+    <delete id="deleteGraphNodeVideoByGraphNodeVideoKeys" parameterType="String">
+        delete from graph_node_video where graph_node_video_key in 
+        <foreach item="graphNodeVideoKey" collection="array" open="(" separator="," close=")">
+            #{graphNodeVideoKey}
+        </foreach>
+    </delete>
+</mapper>
