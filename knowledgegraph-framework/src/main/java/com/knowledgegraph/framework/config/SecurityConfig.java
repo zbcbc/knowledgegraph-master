@@ -113,6 +113,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers("/*/api-docs").anonymous()
                 .antMatchers("/druid/**").anonymous()
                 .antMatchers("/neo4j/**").anonymous() //匿名登录neo4j
+
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated()
                 .and()
