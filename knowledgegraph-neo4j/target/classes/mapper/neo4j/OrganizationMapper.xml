@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="Organization" id="OrganizationResult">
         <result property="id"    column="id"    />
         <result property="orgName"    column="org_name"    />
+        <result property="orgDec"   column="org_dec" />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
         <result property="disabled"    column="disabled"    />
@@ -18,6 +19,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="expertDeptment"    column="expert_deptment"    />
         <result property="expertDec"    column="expert_dec"    />
     </resultMap>
+
+<!--    <resultMap type="OrgExpertPo" id="OrgExpertResult">-->
+<!--        <result property="id"    column="id"    />-->
+<!--        <result property="expertName"    column="expert_name"    />-->
+<!--        <result property="expertDeptment"    column="expert_deptment"    />-->
+<!--        <result property="expertDec"    column="expert_dec"    />-->
+<!--        <result property="relationshipC"-->
+<!--    </resultMap>-->
 
     <select id="selectOrganizationByName" parameterType="String" resultMap="OrganizationResult">
         select * from organization
@@ -31,6 +40,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                  JOIN expert as e
                       on o.ID=r.ORG_ID and e.ID=r.EXPERT_ID
         where o.ID= #{orgID}
+    </select>
+
+    <select id="selectExpertByOrgIDAndRelationship" resultType="com.knowledgegraph.neo4j.result.OrgExpertPo">
+        SELECT
+            e.EXPERT_DEC AS expert_dec,
+            e.EXPERT_DEPTMENT AS expert_deptment,
+            e.EXPERT_NAME AS expert_name,
+            e.ID AS ID ,
+            r.CATEGORY AS relationship_category
+        FROM
+            organization AS o
+                JOIN relationship AS r
+                JOIN expert AS e
+                     ON o.ID = r.ORG_ID AND e.ID = r.EXPERT_ID
+        <where>
+            <if test="orgID != null">
+                and o.ID = #{orgID}
+            </if>
+            <if test="relationship != null">
+                and r.CATEGORY = #{relationship}
+            </if>
+        </where>
     </select>
 
 </mapper>

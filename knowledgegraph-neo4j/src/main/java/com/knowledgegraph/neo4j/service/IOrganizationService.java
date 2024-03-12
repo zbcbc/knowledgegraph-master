@@ -2,6 +2,7 @@ package com.knowledgegraph.neo4j.service;
 
 import com.knowledgegraph.neo4j.pojo.Expert;
 import com.knowledgegraph.neo4j.pojo.Organization;
+import com.knowledgegraph.neo4j.result.OrgExpertPo;
 import com.knowledgegraph.neo4j.result.OrgExpertsDto;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public interface IOrganizationService {
     Organization getOrganizationByName(String orgName);
 
-    List<Expert> getExpertByOrgID(Long id);
+    List<OrgExpertPo> getExpertByOrgIDAndRelationship(Long id, Integer relationship);
 
-    OrgExpertsDto queryExperts(String orgName);
+    OrgExpertsDto queryExperts(String orgName, Integer relationship);
 }

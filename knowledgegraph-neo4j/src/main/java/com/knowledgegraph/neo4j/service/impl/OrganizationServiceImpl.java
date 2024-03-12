@@ -1,6 +1,7 @@
 package com.knowledgegraph.neo4j.service.impl;
 
 import com.knowledgegraph.common.annotation.DataSource;
+import com.knowledgegraph.common.core.domain.AjaxResult;
 import com.knowledgegraph.common.enums.DataSourceType;
 import com.knowledgegraph.neo4j.mapper.OrganizationMapper;
 import com.knowledgegraph.neo4j.mapper.UserMapper;
@@ -27,12 +28,15 @@ public class OrganizationServiceImpl implements IOrganizationService {
 
     @Override
     public Organization getOrganizationByName(String orgName) {
+
         return organizationMapper.selectOrganizationByName(orgName);
     }
 
     @Override
-    public List<Expert> getExpertByOrgID(Long id) {
-        return organizationMapper.selectExpertByOrgID(id);
+    public List<OrgExpertPo> getExpertByOrgIDAndRelationship(Long id, Integer relationship) {
+        //关系 0：属于；1：合作；2：到访
+            return organizationMapper.selectExpertByOrgIDAndRelationship(id, relationship);
+
     }
 
     /**
@@ -41,24 +45,34 @@ public class OrganizationServiceImpl implements IOrganizationService {
      * @return
      */
     @Override
-    public OrgExpertsDto queryExperts(String orgName) {
+    public OrgExpertsDto queryExperts(String orgName, Integer relationship) {
         Organization organization = getOrganizationByName(orgName);
 
         long orgId = organization.getId();
 
         //查询专家列表
-        List<Expert> expertList = getExpertByOrgID(orgId);
+        List<OrgExpertPo> expertList = getExpertByOrgIDAndRelationship(orgId, relationship);
 
         //封装
         OrgExpertsDto orgExpertsDto = new OrgExpertsDto();
-        BeanUtils.copyProperties(organization, orgExpertsDto);
+        BeanUtils.copyProperties(organization, orgExpertsDto); //封装组织信息
         System.out.println("组织名称："+orgExpertsDto.getOrgName());
 
         ArrayList<OrgExpertPo> resultList = new ArrayList<>();
+        //遍历查到的专家列表
         expertList.forEach( item ->{
             OrgExpertPo orgExpertPo = new OrgExpertPo();
+            //封装合作名称
+            if(item.getRelationshipCategory() == 0){
+                item.setRelationshipName("属于");
+            }else if(item.getRelationshipCategory() == 1){
+                item.setRelationshipName("合作");
+            }else if(item.getRelationshipCategory() == 2){
+                item.setRelationshipName("到访");
+            }
             BeanUtils.copyProperties(item, orgExpertPo);
             orgExpertPo.setOrgName(orgName);
+
             resultList.add(orgExpertPo);
         });
 

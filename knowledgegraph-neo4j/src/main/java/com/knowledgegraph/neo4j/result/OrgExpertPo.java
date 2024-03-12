@@ -16,4 +16,10 @@ import lombok.Data;
 public class OrgExpertPo extends Expert {
     //所属机构名称
     String orgName;
+
+    //与该机构的合作关系名
+    String relationshipName;
+
+    //与该机构的合作关系分类
+    Integer relationshipCategory;
 }
