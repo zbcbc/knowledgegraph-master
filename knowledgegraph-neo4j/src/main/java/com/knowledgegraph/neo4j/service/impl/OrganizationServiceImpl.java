@@ -1,5 +1,7 @@
 package com.knowledgegraph.neo4j.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.knowledgegraph.common.annotation.DataSource;
 import com.knowledgegraph.common.core.domain.AjaxResult;
 import com.knowledgegraph.common.enums.DataSourceType;
@@ -21,7 +23,7 @@ import java.util.Map;
 
 @Service
 @DataSource(value = DataSourceType.MASTER)
-public class OrganizationServiceImpl implements IOrganizationService {
+public class OrganizationServiceImpl extends ServiceImpl<OrganizationMapper,Organization> implements IOrganizationService {
 
     @Autowired
     private OrganizationMapper organizationMapper;
@@ -30,6 +32,14 @@ public class OrganizationServiceImpl implements IOrganizationService {
     public Organization getOrganizationByName(String orgName) {
 
         return organizationMapper.selectOrganizationByName(orgName);
+    }
+
+    @Override
+    public long getOrganizationByOrgName(String orgName) {
+        QueryWrapper<Organization> queryWrapper = new QueryWrapper<Organization>()
+                .select("id")
+                .eq("org_name",orgName);
+        return organizationMapper.selectOne(queryWrapper).getId();
     }
 
     @Override

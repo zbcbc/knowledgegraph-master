@@ -11,5 +11,5 @@ import java.util.List;
  */
 public interface ICoagreementService extends IService<Coagreement> {
 
-    List<Coagreement> getCoagreementByOrgId(String orgId);
+    List<Coagreement> getCoagreementByOrgId(long orgId,int agreementType);
 }

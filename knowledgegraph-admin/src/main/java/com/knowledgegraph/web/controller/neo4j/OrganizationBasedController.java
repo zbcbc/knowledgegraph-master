@@ -1,13 +1,17 @@
 package com.knowledgegraph.web.controller.neo4j;
 
 import com.knowledgegraph.common.core.domain.AjaxResult;
+import com.knowledgegraph.neo4j.pojo.Coagreement;
 import com.knowledgegraph.neo4j.result.OrgExpertsDto;
+import com.knowledgegraph.neo4j.service.ICoagreementService;
 import com.knowledgegraph.neo4j.service.IExpertService;
 import com.knowledgegraph.neo4j.service.IOrganizationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * ClassName: OrganizationBasedController
@@ -27,6 +31,8 @@ public class OrganizationBasedController {
     @Autowired
     private IExpertService iExpertService;
 
+    @Autowired
+    private ICoagreementService iCoagreementService;
 
     @ApiOperation("查询xx机构,关系为合作/属于/到访的专家")
     @GetMapping("/staff")
@@ -36,7 +42,14 @@ public class OrganizationBasedController {
         return AjaxResult.success(iOrganizationService.queryExperts(orgName, relationship));
     }
 
-
-
+    @ApiOperation("查询xx机构,类型为框架协议/学生交流/学术交流的协议")
+    @GetMapping("/coagreement")
+    public AjaxResult queryCoagreement(String orgName,
+                                   @RequestParam(value = "agreementType", required = false) Integer agreementType){
+        long orgId = iOrganizationService.getOrganizationByOrgName(orgName);
+        List<Coagreement> coList = iCoagreementService.getCoagreementByOrgId(orgId, agreementType);
+        //TODO 需要包装给前端的VO
+        return AjaxResult.success(coList);
+    }
 
 }

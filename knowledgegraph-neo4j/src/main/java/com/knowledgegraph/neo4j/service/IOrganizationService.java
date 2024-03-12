@@ -1,5 +1,6 @@
 package com.knowledgegraph.neo4j.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.knowledgegraph.neo4j.pojo.Expert;
 import com.knowledgegraph.neo4j.pojo.Organization;
 import com.knowledgegraph.neo4j.result.OrgExpertPo;
@@ -12,8 +13,10 @@ import java.util.List;
  * Author:  Jinzhenliang
  * Date:  2024/3/6 15:38
  */
-public interface IOrganizationService {
+public interface IOrganizationService extends IService<Organization> {
     Organization getOrganizationByName(String orgName);
+
+    long getOrganizationByOrgName(String orgName);
 
     List<OrgExpertPo> getExpertByOrgIDAndRelationship(Long id, Integer relationship);
 
