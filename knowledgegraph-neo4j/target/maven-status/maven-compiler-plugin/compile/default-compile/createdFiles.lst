@@ -18,8 +18,10 @@ com\knowledgegraph\neo4j\service\INeo4jTestService.class
 com\knowledgegraph\neo4j\domain\BaseDept.class
 com\knowledgegraph\neo4j\result\OrgExpertsDto.class
 com\knowledgegraph\neo4j\service\IOrganizationService.class
+com\knowledgegraph\neo4j\service\impl\ExpertServiceImpl.class
 com\knowledgegraph\neo4j\mapper\GraphMemberMapper.class
 com\knowledgegraph\neo4j\service\impl\GraphRelationshipServiceImpl.class
+com\knowledgegraph\neo4j\config\MybatisPlusConfig.class
 com\knowledgegraph\neo4j\domain\GraphJsonData.class
 com\knowledgegraph\neo4j\result\PageResult.class
 com\knowledgegraph\neo4j\pojo\Expert.class
@@ -31,6 +33,7 @@ com\knowledgegraph\neo4j\service\IDataStatisticsService.class
 com\knowledgegraph\neo4j\service\impl\UserServiceImpl.class
 com\knowledgegraph\neo4j\result\PageParam.class
 com\knowledgegraph\neo4j\service\IGraphNodeVideoService.class
+com\knowledgegraph\neo4j\result\OrgExpertPo.class
 com\knowledgegraph\neo4j\mapper\UserMapper.class
 com\knowledgegraph\neo4j\service\impl\Neo4jTestServiceImpl.class
 com\knowledgegraph\neo4j\service\impl\GraphJsonDataServiceImpl.class
@@ -41,7 +44,9 @@ com\knowledgegraph\neo4j\service\impl\GraphMemberServiceImpl.class
 com\knowledgegraph\neo4j\service\impl\GraphNodeServiceImpl.class
 com\knowledgegraph\neo4j\service\impl\Neo4jNodeServiceImpl.class
 com\knowledgegraph\neo4j\service\IGraphService.class
+com\knowledgegraph\neo4j\service\IExpertService.class
 com\knowledgegraph\neo4j\domain\GraphNodeVideo.class
+com\knowledgegraph\neo4j\mapper\ExpertMapper.class
 com\knowledgegraph\neo4j\service\IGraphApplyService.class
 com\knowledgegraph\neo4j\domain\UserModel.class
 com\knowledgegraph\neo4j\service\IGraphRelationshipService.class
