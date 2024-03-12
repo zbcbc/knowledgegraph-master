@@ -2,6 +2,7 @@ package com.knowledgegraph.web.controller.neo4j;
 
 import com.knowledgegraph.common.core.domain.AjaxResult;
 import com.knowledgegraph.neo4j.pojo.Coagreement;
+import com.knowledgegraph.neo4j.result.CoagreementVO;
 import com.knowledgegraph.neo4j.result.OrgExpertsDto;
 import com.knowledgegraph.neo4j.service.ICoagreementService;
 import com.knowledgegraph.neo4j.service.IExpertService;
@@ -11,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,7 +51,18 @@ public class OrganizationBasedController {
         long orgId = iOrganizationService.getOrganizationByOrgName(orgName);
         List<Coagreement> coList = iCoagreementService.getCoagreementByOrgId(orgId, agreementType);
         //TODO 需要包装给前端的VO
-        return AjaxResult.success(coList);
+        List<CoagreementVO> voList = new ArrayList<>();
+        CoagreementVO vo = new CoagreementVO();
+        Coagreement coagreement;
+        for (int i = 0; i < coList.size(); i++) {
+            coagreement = coList.get(i);
+            vo.setOrgName(orgName);
+            vo.setAgreementId(coagreement.getId());
+            vo.setContent(coagreement.getAgreementContent());
+            vo.setCollegeName("xxx学校");
+            voList.add(vo);
+        }
+        return AjaxResult.success(voList);
     }
 
 }
