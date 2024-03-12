@@ -7,10 +7,7 @@ import com.knowledgegraph.neo4j.service.IOrganizationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * ClassName: OrganizationBasedController
@@ -30,16 +27,16 @@ public class OrganizationBasedController {
     @Autowired
     private IExpertService iExpertService;
 
-    @ApiOperation("查询该机构为国外专家的工作人员")
+
+    @ApiOperation("查询xx机构,关系为合作/属于/到访的专家")
     @GetMapping("/staff")
-    public AjaxResult queryExperts(String orgName){
+    public AjaxResult queryExperts(@RequestParam("orgName") String orgName,
+                                   @RequestParam(value = "relationship", required = false) Integer relationship){
 
-        return AjaxResult.success(iOrganizationService.queryExperts(orgName));
+        return AjaxResult.success(iOrganizationService.queryExperts(orgName, relationship));
     }
 
-    @ApiOperation("根据id查询专家详细信息")
-    @GetMapping("/expert/{id}")
-    public AjaxResult queryExpertById(@PathVariable Long id){
-        return AjaxResult.success(iExpertService.getById(id));
-    }
+
+
+
 }
