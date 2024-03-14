@@ -15,4 +15,12 @@
         id,title,publication_year,
         conference_journal
     </sql>
+
+    <select id="queryPaperByExpertIdAndAreaId" resultType="com.knowledgegraph.neo4j.pojo.Paper">
+        SELECT p.ID, p.title, p.publication_year, p.conference_journal
+        FROM
+            expert_paper as ep
+                LEFT JOIN paper as p ON p.ID = ep.PAPER_ID
+        WHERE ep.EXPERT_ID = #{expertId} AND ep.AREA_ID = #{areaId}
+    </select>
 </mapper>

@@ -6,12 +6,14 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * @TableName expert_areas
  */
 @TableName(value ="expert_areas")
 @Data
+
 public class ExpertAreas implements Serializable {
     private Long id;
 

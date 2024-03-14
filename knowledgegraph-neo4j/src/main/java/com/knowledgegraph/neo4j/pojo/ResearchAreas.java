@@ -6,12 +6,14 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * @TableName research_areas
  */
 @TableName(value ="research_areas")
 @Data
+@ToString
 public class ResearchAreas implements Serializable {
     private Long id;
 
@@ -35,25 +37,6 @@ public class ResearchAreas implements Serializable {
             && (this.getAreaName() == null ? other.getAreaName() == null : this.getAreaName().equals(other.getAreaName()));
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getAreaName() == null) ? 0 : getAreaName().hashCode());
-        return result;
-    }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", areaName=").append(areaName);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
-    }
+
 }

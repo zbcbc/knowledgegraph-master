@@ -2,6 +2,7 @@ package com.knowledgegraph.neo4j.result.dto;
 
 import com.knowledgegraph.neo4j.result.vo.OrgExpertVo;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * @Version 1.0
  */
 @Data
+@ToString
 public class OrgExpertsDto extends OrgInfoDto {
 
 

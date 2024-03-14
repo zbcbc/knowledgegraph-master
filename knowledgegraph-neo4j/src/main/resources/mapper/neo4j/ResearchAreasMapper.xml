@@ -15,7 +15,7 @@
 
 
     <select id="queryAreasByExpertId" resultType="com.knowledgegraph.neo4j.result.dto.AreaPapersDto">
-        SELECT a.area_name
+        SELECT a.id,a.area_name
         FROM
             expert as e
                 LEFT JOIN expert_areas as r ON e.ID = r.expert_id
