@@ -2,8 +2,7 @@ package com.knowledgegraph.web.controller.neo4j;
 
 import com.knowledgegraph.common.core.domain.AjaxResult;
 import com.knowledgegraph.neo4j.pojo.Coagreement;
-import com.knowledgegraph.neo4j.result.CoagreementVO;
-import com.knowledgegraph.neo4j.result.OrgExpertsDto;
+import com.knowledgegraph.neo4j.result.vo.CoagreementVO;
 import com.knowledgegraph.neo4j.service.ICoagreementService;
 import com.knowledgegraph.neo4j.service.IExpertService;
 import com.knowledgegraph.neo4j.service.IOrganizationService;
@@ -36,13 +35,31 @@ public class OrganizationBasedController {
     @Autowired
     private ICoagreementService iCoagreementService;
 
-    @ApiOperation("查询xx机构,关系为合作/属于/到访的专家")
+    @ApiOperation("查询xx机构,关系为属于/合作/到访的专家(relationship 0:属于;1:合作;2:到访)" )
     @GetMapping("/staff")
     public AjaxResult queryExperts(@RequestParam("orgName") String orgName,
                                    @RequestParam(value = "relationship", required = false) Integer relationship){
+        if(orgName == null){
+            return AjaxResult.error("机构名称不能为空");
+        }
 
         return AjaxResult.success(iOrganizationService.queryExperts(orgName, relationship));
     }
+
+
+    //TODO:增加图谱的层数
+//    @ApiOperation("查询以xx机构为单位，关联的专家及其研究方向、论文的知识图谱")
+//    @GetMapping("/query")
+//    public AjaxResult queryGraph(@RequestParam("orgName") String orgName,
+//                                 @RequestParam(value = "relationship", required = false) Integer relationship){
+//        if(orgName == null){
+//            return AjaxResult.error("机构名称不能为空");
+//        }
+//        return AjaxResult.success(iOrganizationService.queryGraph(orgName, relationship));
+//    }
+
+
+
 
     @ApiOperation("查询xx机构,类型为框架协议/学生交流/学术交流的协议")
     @GetMapping("/coagreement")

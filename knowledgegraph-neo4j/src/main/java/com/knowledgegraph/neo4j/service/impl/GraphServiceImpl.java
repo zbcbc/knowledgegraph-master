@@ -8,8 +8,6 @@ import com.knowledgegraph.common.utils.SecurityUtils;
 import com.knowledgegraph.common.utils.uuid.UUID;
 import com.knowledgegraph.neo4j.domain.GraphMember;
 import com.knowledgegraph.neo4j.mapper.GraphMemberMapper;
-import com.knowledgegraph.neo4j.mapper.OrganizationMapper;
-import com.knowledgegraph.neo4j.result.OrgExpertsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.knowledgegraph.neo4j.mapper.GraphMapper;

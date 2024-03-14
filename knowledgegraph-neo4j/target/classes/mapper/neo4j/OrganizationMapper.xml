@@ -42,7 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where o.ID= #{orgID}
     </select>
 
-    <select id="selectExpertByOrgIDAndRelationship" resultType="com.knowledgegraph.neo4j.result.OrgExpertPo">
+    <select id="selectExpertByOrgIDAndRelationship" resultType="com.knowledgegraph.neo4j.result.vo.OrgExpertVo">
         SELECT
             e.EXPERT_DEC AS expert_dec,
             e.EXPERT_DEPTMENT AS expert_deptment,

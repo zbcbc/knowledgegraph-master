@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowledgegraph.neo4j.mapper.PaperMapper">
+
+    <resultMap id="BaseResultMap" type="com.knowledgegraph.neo4j.pojo.Paper">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="publicationYear" column="publication_year" jdbcType="BIGINT"/>
+            <result property="conferenceJournal" column="conference_journal" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,title,publication_year,
+        conference_journal
+    </sql>
+</mapper>

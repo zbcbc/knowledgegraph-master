@@ -1,11 +1,9 @@
 package com.knowledgegraph.neo4j.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.knowledgegraph.neo4j.pojo.Expert;
 import com.knowledgegraph.neo4j.pojo.Organization;
-import com.knowledgegraph.neo4j.result.OrgExpertPo;
-import com.knowledgegraph.neo4j.result.OrgExpertsDto;
-import org.springframework.web.bind.annotation.PathVariable;
+import com.knowledgegraph.neo4j.result.vo.OrgExpertVo;
+import com.knowledgegraph.neo4j.result.dto.OrgExpertsDto;
 
 import java.util.List;
 
@@ -18,7 +16,9 @@ public interface IOrganizationService extends IService<Organization> {
 
     long getOrganizationByOrgName(String orgName);
 
-    List<OrgExpertPo> getExpertByOrgIDAndRelationship(Long id, Integer relationship);
+    List<OrgExpertVo> getExpertByOrgIDAndRelationship(Long id, Integer relationship);
 
     OrgExpertsDto queryExperts(String orgName, Integer relationship);
+
+    OrgExpertsDto queryGraph(String orgName, Integer relationship);
 }
