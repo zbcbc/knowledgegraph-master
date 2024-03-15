@@ -11,7 +11,7 @@
  Target Server Version : 80300
  File Encoding         : 65001
 
- Date: 12/03/2024 14:17:03
+ Date: 15/03/2024 10:29:55
 */
 
 SET NAMES utf8mb4;
@@ -44,20 +44,64 @@ INSERT INTO `coagreement` VALUES (1, '关于BAT与西电加强学术合作的协
 -- ----------------------------
 DROP TABLE IF EXISTS `expert`;
 CREATE TABLE `expert`  (
-  `ID` bigint NOT NULL,
+  `ID` bigint NOT NULL AUTO_INCREMENT,
   `EXPERT_NAME` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '专家名称',
   `EXPERT_DEPTMENT` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '专家所属单位',
   `EXPERT_DEC` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '个人简介',
   PRIMARY KEY (`ID`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of expert
 -- ----------------------------
 INSERT INTO `expert` VALUES (1, '牛顿', '部门a', '喜欢吃苹果');
 INSERT INTO `expert` VALUES (2, '人物a', '部门b', '很厉害');
-INSERT INTO `expert` VALUES (3, '人物b', '部门c', '西安电子科技大学“华山学者”领军教授,博士/硕士研究生导师');
+INSERT INTO `expert` VALUES (3, '崔xx', '计算机科学与技术学院', '西安电子科技大学计算机科学与技术学院教授、博士生导师,现任计算机科学与技术学院(国家示范性软件学院)执行院长、校学术委员会委员，计算机科学与技术专业负责人、”计算机科学与技术“双一流建设学科数据工程方向带头人。');
 INSERT INTO `expert` VALUES (4, '人物c', '部门d', '青研院联合培养');
+INSERT INTO `expert` VALUES (5, 'Tom', '计算机科学与技术部门', '学科领军人物之一');
+INSERT INTO `expert` VALUES (6, 'Kina', '网络与信息安全部门', '西电教授');
+INSERT INTO `expert` VALUES (7, 'Meria', '大数据部门', '成电讲师');
+
+-- ----------------------------
+-- Table structure for expert_areas
+-- ----------------------------
+DROP TABLE IF EXISTS `expert_areas`;
+CREATE TABLE `expert_areas`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `expert_id` bigint NULL DEFAULT NULL COMMENT '专家id',
+  `research_area_id` bigint NULL DEFAULT NULL COMMENT '研究方向id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of expert_areas
+-- ----------------------------
+INSERT INTO `expert_areas` VALUES (1, 1, 1);
+INSERT INTO `expert_areas` VALUES (2, 1, 2);
+INSERT INTO `expert_areas` VALUES (3, 3, 3);
+INSERT INTO `expert_areas` VALUES (4, 3, 4);
+
+-- ----------------------------
+-- Table structure for expert_paper
+-- ----------------------------
+DROP TABLE IF EXISTS `expert_paper`;
+CREATE TABLE `expert_paper`  (
+  `id` bigint NOT NULL,
+  `expert_id` bigint NULL DEFAULT NULL COMMENT '专家id',
+  `paper_id` bigint NULL DEFAULT NULL COMMENT '论文id',
+  `area_id` bigint NULL DEFAULT NULL COMMENT '研究方向id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of expert_paper
+-- ----------------------------
+INSERT INTO `expert_paper` VALUES (1, 1, 1, 1);
+INSERT INTO `expert_paper` VALUES (2, 1, 2, 1);
+INSERT INTO `expert_paper` VALUES (3, 1, 3, 2);
+INSERT INTO `expert_paper` VALUES (4, 1, 4, 2);
+INSERT INTO `expert_paper` VALUES (5, 3, 5, 3);
+INSERT INTO `expert_paper` VALUES (6, 3, 6, 3);
 
 -- ----------------------------
 -- Table structure for gen_table
@@ -377,6 +421,28 @@ INSERT INTO `organization` VALUES (2, '西安电子科技大学', '西军电', '
 INSERT INTO `organization` VALUES (3, '清华大学', '中国top2', '2024-03-12 09:23:22', '2024-03-12 09:23:25', 0);
 
 -- ----------------------------
+-- Table structure for paper
+-- ----------------------------
+DROP TABLE IF EXISTS `paper`;
+CREATE TABLE `paper`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '论文标题',
+  `publication_year` bigint NULL DEFAULT NULL COMMENT '发表年份',
+  `conference_journal` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '刊名',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of paper
+-- ----------------------------
+INSERT INTO `paper` VALUES (1, 'Law of universal gravitation', 1687, '《自然哲学的数学原理》');
+INSERT INTO `paper` VALUES (2, '牛顿定律1', 1687, '《自然哲学的数学原理》');
+INSERT INTO `paper` VALUES (3, '牛顿定律2', 1725, '顶刊a');
+INSERT INTO `paper` VALUES (4, '牛顿定律3', 1700, '顶刊b');
+INSERT INTO `paper` VALUES (5, 'Toward Balancing the Efficiency and Effectiveness in k-Facility Relocation Problem', 2023, 'ACM');
+INSERT INTO `paper` VALUES (6, 'Accelerating massive queries of approximate nearest neighbor search on high-dimensional data', 2023, '《Knowledge and Information Systems》');
+
+-- ----------------------------
 -- Table structure for qrtz_blob_triggers
 -- ----------------------------
 DROP TABLE IF EXISTS `qrtz_blob_triggers`;
@@ -603,7 +669,7 @@ CREATE TABLE `relationship`  (
   `ORG_ID` bigint NOT NULL COMMENT '组织ID',
   `EXPERT_ID` bigint NOT NULL COMMENT '专家ID',
   PRIMARY KEY (`ID`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of relationship
@@ -612,6 +678,27 @@ INSERT INTO `relationship` VALUES (1, 1, 1, 1);
 INSERT INTO `relationship` VALUES (2, 0, 1, 2);
 INSERT INTO `relationship` VALUES (3, 1, 1, 3);
 INSERT INTO `relationship` VALUES (4, 2, 1, 4);
+INSERT INTO `relationship` VALUES (5, 0, 3, 5);
+INSERT INTO `relationship` VALUES (6, 0, 3, 6);
+INSERT INTO `relationship` VALUES (7, 2, 3, 7);
+
+-- ----------------------------
+-- Table structure for research_areas
+-- ----------------------------
+DROP TABLE IF EXISTS `research_areas`;
+CREATE TABLE `research_areas`  (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '研究方向id',
+  `area_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '研究方向名',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of research_areas
+-- ----------------------------
+INSERT INTO `research_areas` VALUES (1, '力学');
+INSERT INTO `research_areas` VALUES (2, '运动学');
+INSERT INTO `research_areas` VALUES (3, '数据挖掘');
+INSERT INTO `research_areas` VALUES (4, '大数据算法');
 
 -- ----------------------------
 -- Table structure for sys_config
@@ -840,7 +927,7 @@ CREATE TABLE `sys_logininfor`  (
   `msg` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT '' COMMENT '提示消息',
   `login_time` datetime NULL DEFAULT NULL COMMENT '访问时间',
   PRIMARY KEY (`info_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 265 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '系统访问记录' ROW_FORMAT = COMPACT;
+) ENGINE = InnoDB AUTO_INCREMENT = 275 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '系统访问记录' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of sys_logininfor
@@ -1010,6 +1097,16 @@ INSERT INTO `sys_logininfor` VALUES (261, '123', '10.17.2.88', '内网IP', 'Chro
 INSERT INTO `sys_logininfor` VALUES (262, '123', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-03-12 09:59:38');
 INSERT INTO `sys_logininfor` VALUES (263, '123', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-03-12 11:10:37');
 INSERT INTO `sys_logininfor` VALUES (264, '123', '10.17.2.88', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-03-12 13:01:51');
+INSERT INTO `sys_logininfor` VALUES (265, '123', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-03-12 14:25:58');
+INSERT INTO `sys_logininfor` VALUES (266, '123', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-03-12 18:25:56');
+INSERT INTO `sys_logininfor` VALUES (267, '123', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '1', '验证码错误', '2024-03-12 19:22:52');
+INSERT INTO `sys_logininfor` VALUES (268, '123', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '1', '验证码错误', '2024-03-12 19:22:53');
+INSERT INTO `sys_logininfor` VALUES (269, '123', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-03-12 19:22:56');
+INSERT INTO `sys_logininfor` VALUES (270, '123', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-03-13 07:53:00');
+INSERT INTO `sys_logininfor` VALUES (271, '123', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-03-13 09:41:15');
+INSERT INTO `sys_logininfor` VALUES (272, '123', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-03-13 09:44:39');
+INSERT INTO `sys_logininfor` VALUES (273, '123', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-03-13 09:53:49');
+INSERT INTO `sys_logininfor` VALUES (274, 'admin', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-03-14 16:09:49');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -1642,13 +1739,13 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '了却非', '00', 'ry@163.com', '15888888888', '1', '/profile/avatar/2022/03/29/ae623102-2324-442f-9efe-96ac7780ad31.jpeg', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2022-04-19 11:24:43', 'admin', '2022-03-24 14:38:13', '', '2022-04-19 11:24:43', '管理员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '了却非', '00', 'ry@163.com', '15888888888', '1', '/profile/avatar/2022/03/29/ae623102-2324-442f-9efe-96ac7780ad31.jpeg', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2024-03-14 16:09:49', 'admin', '2022-03-24 14:38:13', '', '2024-03-14 16:09:48', '管理员');
 INSERT INTO `sys_user` VALUES (2, 105, 'ry', '了却非test', '00', 'ry@qq.com', '15666666666', '0', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2022-04-19 11:22:05', 'admin', '2022-03-24 14:38:14', 'admin', '2022-04-19 11:22:05', '测试员');
 INSERT INTO `sys_user` VALUES (3, NULL, 'liaoquefei', 'liaoquefei', '00', '', '', '0', '', '$2a$10$cmKklNJR2dpVqVEzRS1UX.ljSIIAbXQ.7S3gDGxp2xLhW3YfiIXEm', '0', '0', '127.0.0.1', '2022-04-18 22:07:47', '', '2022-04-18 22:06:09', 'admin', '2022-04-18 22:07:47', NULL);
 INSERT INTO `sys_user` VALUES (4, NULL, 'arrival', 'arrival', '00', '', '', '0', '', '$2a$10$IKUrmT.cD2ybwo3oMeomguOMkmnzgoPt78HMOVXZvHU9S0uPnHhEO', '0', '0', '127.0.0.1', '2022-04-18 22:29:20', '', '2022-04-18 22:26:21', '', '2022-04-18 22:29:19', NULL);
 INSERT INTO `sys_user` VALUES (5, NULL, 'lqf', 'lqf', '00', '', '', '0', '', '$2a$10$zUi5HtudFHWmYnmott8er.4XOOB9x88XLmHSQfdNPcjJ3mP2x.6Zm', '0', '0', '127.0.0.1', '2022-04-18 22:34:58', '', '2022-04-18 22:34:45', '', '2022-04-18 22:34:58', NULL);
 INSERT INTO `sys_user` VALUES (6, NULL, 'liang', 'liang', '00', '', '', '0', '', '$2a$10$OHiCk2Plivs2jhW4z026UuSX9f35hE8Ac7A3Cy8zF/XW4WVBMPTFS', '0', '0', '127.0.0.1', '2024-03-06 12:57:11', '', '2024-03-04 18:51:36', '', '2024-03-06 12:57:10', NULL);
-INSERT INTO `sys_user` VALUES (7, NULL, '123', '123', '00', '', '', '0', '', '$2a$10$DpclOHpheC.PB5FuPyOQue6SDBCXOiRezH8/Ti7okjBQoF483gnMK', '0', '0', '10.17.2.88', '2024-03-12 13:01:52', '', '2024-03-04 19:36:49', '', '2024-03-12 13:01:51', NULL);
+INSERT INTO `sys_user` VALUES (7, NULL, '123', '123', '00', '', '', '0', '', '$2a$10$DpclOHpheC.PB5FuPyOQue6SDBCXOiRezH8/Ti7okjBQoF483gnMK', '0', '0', '127.0.0.1', '2024-03-13 09:53:50', '', '2024-03-04 19:36:49', '', '2024-03-13 09:53:49', NULL);
 
 -- ----------------------------
 -- Table structure for sys_user_post
