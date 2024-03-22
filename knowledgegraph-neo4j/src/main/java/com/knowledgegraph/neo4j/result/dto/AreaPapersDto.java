@@ -19,6 +19,9 @@ import java.util.List;
 @Data
 @ToString
 public class AreaPapersDto extends ResearchAreas {
+    //该方向所属教授id
+    //Long expertId;
+
     //该方向下的论文
     List<Paper> paperList;
 }

@@ -62,6 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and r.CATEGORY = #{relationship}
             </if>
         </where>
+        limit 6
     </select>
 
 </mapper>

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @DataSource(value = DataSourceType.MASTER)
@@ -146,7 +147,12 @@ public class OrganizationServiceImpl extends ServiceImpl<OrganizationMapper, Org
             //=======查询该专家 该研究方向下的论文列表=======
             if (areaList != null && !areaList.isEmpty() && areaList.get(0) != null) {
                 areaList.forEach(areaPapersDto -> {
+                    //areaPapersDto.setExpertId(expertId); //结点唯一
+                    UUID uuid = UUID.randomUUID();
+                    Long uniqueAreaId = uuid.getMostSignificantBits();
+                    areaPapersDto.setId(uniqueAreaId);
                     List<Paper> papers = paperMapper.queryPaperByExpertIdAndAreaId(expertId, areaPapersDto.getId());
+
                     if (papers != null && !papers.isEmpty() && papers.get(0) != null) {
                         areaPapersDto.setPaperList(papers); //将该论文list封装到areaDto
                     }

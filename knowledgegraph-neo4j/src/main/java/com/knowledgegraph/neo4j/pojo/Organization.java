@@ -2,6 +2,8 @@ package com.knowledgegraph.neo4j.pojo;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class Organization {
 
@@ -10,8 +12,8 @@ public class Organization {
 
   private String orgDec; //机构信息
 
-  private java.sql.Timestamp createTime;
-  private java.sql.Timestamp updateTime;
+  private LocalDateTime createTime;
+  private LocalDateTime updateTime;
   private long disabled;
 
 

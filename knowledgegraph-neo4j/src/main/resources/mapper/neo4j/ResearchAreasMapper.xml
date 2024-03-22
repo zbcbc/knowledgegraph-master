@@ -21,6 +21,7 @@
                 LEFT JOIN expert_areas as r ON e.ID = r.expert_id
                 LEFT JOIN research_areas as a ON r.research_area_id = a.id
         where e.ID = #{expertId}
+
     </select>
 
 
