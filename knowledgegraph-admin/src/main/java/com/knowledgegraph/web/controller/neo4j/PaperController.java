@@ -7,10 +7,7 @@ import com.knowledgegraph.neo4j.service.PaperService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * ClassName: PaperController
@@ -38,5 +35,12 @@ public class PaperController {
             return AjaxResult.error("增加研究方向结点失败");
         }
     }
+
+    @ApiOperation("删除论文结点")
+    @DeleteMapping("/{paperId}")
+    public AjaxResult deletePaper(@PathVariable Long paperId){
+        return paperService.deletePaper(paperId);
+    }
+
 
 }

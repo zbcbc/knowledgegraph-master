@@ -1,13 +1,16 @@
 package com.knowledgegraph.web.controller.neo4j;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.knowledgegraph.common.core.domain.AjaxResult;
 import com.knowledgegraph.neo4j.pojo.Coagreement;
 import com.knowledgegraph.neo4j.pojo.Organization;
+import com.knowledgegraph.neo4j.pojo.Relationship;
 import com.knowledgegraph.neo4j.result.dto.OrganizationDto;
 import com.knowledgegraph.neo4j.result.vo.CoagreementVO;
 import com.knowledgegraph.neo4j.service.ICoagreementService;
 import com.knowledgegraph.neo4j.service.IExpertService;
 import com.knowledgegraph.neo4j.service.IOrganizationService;
+import com.knowledgegraph.neo4j.service.RelationshipService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
@@ -37,6 +40,8 @@ public class OrganizationController {
     private IExpertService iExpertService;
     @Autowired
     private ICoagreementService iCoagreementService;
+    @Autowired
+    private RelationshipService relationshipService;
 
     @ApiOperation("查询xx机构,关系为属于/合作/到访的专家(relationship 0:属于;1:合作;2:到访)" )
     @GetMapping("/staff")
@@ -64,7 +69,7 @@ public class OrganizationController {
     @GetMapping("/coagreement")
     public AjaxResult queryCoagreement(String orgName,
                                    @RequestParam(value = "agreementType", required = false) Integer agreementType){
-        long orgId = iOrganizationService.getOrganizationByOrgName(orgName);
+       Long orgId = iOrganizationService.getOrganizationByOrgName(orgName);
         List<Coagreement> coList = iCoagreementService.getCoagreementByOrgId(orgId, agreementType);
         //TODO 需要包装给前端的VO
         List<CoagreementVO> voList = new ArrayList<>();
@@ -98,16 +103,11 @@ public class OrganizationController {
         }
     }
 
-//    @ApiOperation("删除机构结点")
-//    @DeleteMapping("/{organizationId}")
-//    public AjaxResult deleteOrganization(@PathVariable Long organizationId){
-//        boolean b = iOrganizationService.removeById(organizationId);
-//        if(b == true){
-//            return AjaxResult.success("删除机构结点成功");
-//        }else {
-//            return AjaxResult.error("删除机构结点失败");
-//        }
-//    }
+    @ApiOperation("删除机构结点")
+    @DeleteMapping("/{orgId}")
+    public AjaxResult deleteOrganization(@PathVariable Long orgId){
+        return iOrganizationService.deleteOrganization(orgId);
+    }
 
 
 }

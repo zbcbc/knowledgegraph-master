@@ -15,7 +15,9 @@ import lombok.ToString;
 @Data
 @ToString
 public class OrganizationDto {
+
     private long id;
+
     private String orgName;
 
     private String orgDec; //机构信息

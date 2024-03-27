@@ -1,5 +1,6 @@
 package com.knowledgegraph.neo4j.service;
 
+import com.knowledgegraph.common.core.domain.AjaxResult;
 import com.knowledgegraph.neo4j.pojo.Paper;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -10,4 +11,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface PaperService extends IService<Paper> {
 
+    AjaxResult deletePaper(Long paperId);
 }

@@ -11,10 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
@@ -45,6 +42,18 @@ public class ExpertController {
         }else {
             return AjaxResult.error("增加专家失败");
         }
+    }
+
+    @ApiOperation("删除专家结点")
+    @DeleteMapping("/{expertId}")
+    public AjaxResult deleteExpert(@PathVariable Long expertId){
+        return iExpertService.deleteExpert(expertId);
+    }
+
+    @ApiOperation("删除某专家的某研究方向结点")
+    @DeleteMapping
+    public AjaxResult deleteAreaWithExpert(@RequestParam("expertId") Long expertId, @RequestParam("researchAreaId") Long researchAreaId){
+        return iExpertService.deleteAreaWithExpert(expertId, researchAreaId);
     }
 
 //    @ApiOperation("增加专家-机构关系")

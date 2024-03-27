@@ -1,15 +1,15 @@
 package com.knowledgegraph.neo4j.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.knowledgegraph.common.annotation.DataSource;
+import com.knowledgegraph.common.core.domain.AjaxResult;
 import com.knowledgegraph.common.enums.DataSourceType;
-import com.knowledgegraph.neo4j.mapper.ExpertMapper;
-import com.knowledgegraph.neo4j.mapper.OrganizationMapper;
-import com.knowledgegraph.neo4j.mapper.PaperMapper;
-import com.knowledgegraph.neo4j.mapper.ResearchAreasMapper;
+import com.knowledgegraph.neo4j.mapper.*;
 import com.knowledgegraph.neo4j.pojo.Organization;
 import com.knowledgegraph.neo4j.pojo.Paper;
+import com.knowledgegraph.neo4j.pojo.Relationship;
 import com.knowledgegraph.neo4j.result.dto.AreaPapersDto;
 import com.knowledgegraph.neo4j.result.vo.OrgExpertVo;
 import com.knowledgegraph.neo4j.result.dto.OrgExpertsDto;
@@ -17,8 +17,10 @@ import com.knowledgegraph.neo4j.service.IOrganizationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,6 +34,8 @@ public class OrganizationServiceImpl extends ServiceImpl<OrganizationMapper, Org
     private ResearchAreasMapper researchAreasMapper;
     @Autowired
     private PaperMapper paperMapper;
+    @Autowired
+    private RelationshipMapper relationshipMapper;
 
     @Override
     public Organization getOrganizationByName(String orgName) {
@@ -150,9 +154,9 @@ public class OrganizationServiceImpl extends ServiceImpl<OrganizationMapper, Org
                     //areaPapersDto.setExpertId(expertId); //结点唯一
                     UUID uuid = UUID.randomUUID();
                     Long uniqueAreaId = uuid.getMostSignificantBits();
-                    areaPapersDto.setId(uniqueAreaId);
+                    //areaPapersDto.setId(uniqueAreaId);
                     List<Paper> papers = paperMapper.queryPaperByExpertIdAndAreaId(expertId, areaPapersDto.getId());
-
+                    areaPapersDto.setId(uniqueAreaId);
                     if (papers != null && !papers.isEmpty() && papers.get(0) != null) {
                         areaPapersDto.setPaperList(papers); //将该论文list封装到areaDto
                     }
@@ -166,5 +170,26 @@ public class OrganizationServiceImpl extends ServiceImpl<OrganizationMapper, Org
         orgExpertsDto.setExpertList(expertList);
 
         return orgExpertsDto;
+    }
+
+    /**
+     * 删除机构结点
+     * @param orgId
+     * @return
+     */
+    @Override
+    public AjaxResult deleteOrganization(Long orgId) {
+        //查询该机构是否存在子节点
+        List<Relationship> relationships = relationshipMapper.selectList(new LambdaQueryWrapper<Relationship>().eq(Relationship::getOrgId, orgId));
+        if(!CollectionUtils.isEmpty(relationships)){
+            return AjaxResult.error("该节点下存在子节点");
+        }
+
+        int i = organizationMapper.deleteById(orgId);
+        if(i <= 0){
+            AjaxResult.error("删除机构结点失败");
+        }
+
+        return AjaxResult.success("删除机构节点成功");
     }
 }
