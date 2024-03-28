@@ -7,16 +7,19 @@ import com.knowledgegraph.common.annotation.DataSource;
 import com.knowledgegraph.common.core.domain.AjaxResult;
 import com.knowledgegraph.common.enums.DataSourceType;
 import com.knowledgegraph.neo4j.mapper.*;
+import com.knowledgegraph.neo4j.pojo.Expert;
 import com.knowledgegraph.neo4j.pojo.Organization;
 import com.knowledgegraph.neo4j.pojo.Paper;
 import com.knowledgegraph.neo4j.pojo.Relationship;
 import com.knowledgegraph.neo4j.result.dto.AreaPapersDto;
+import com.knowledgegraph.neo4j.result.dto.CreateExpertDto;
 import com.knowledgegraph.neo4j.result.vo.OrgExpertVo;
 import com.knowledgegraph.neo4j.result.dto.OrgExpertsDto;
 import com.knowledgegraph.neo4j.service.IOrganizationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -36,6 +39,8 @@ public class OrganizationServiceImpl extends ServiceImpl<OrganizationMapper, Org
     private PaperMapper paperMapper;
     @Autowired
     private RelationshipMapper relationshipMapper;
+    @Autowired
+    private ExpertMapper expertMapper;
 
     @Override
     public Organization getOrganizationByName(String orgName) {
@@ -191,5 +196,65 @@ public class OrganizationServiceImpl extends ServiceImpl<OrganizationMapper, Org
         }
 
         return AjaxResult.success("删除机构节点成功");
+    }
+
+    /**
+     * 创建该机构专家结点
+     * @param createExpertDto
+     * @return
+     */
+    @Transactional
+    @Override
+    public AjaxResult createExpertWithOrg(CreateExpertDto createExpertDto) {
+        String orgName = createExpertDto.getOrgName();
+
+        //先查询是否有该专家，如果没有就新增,如果有就只新增关系
+        LambdaQueryWrapper<Expert> wrapper = new LambdaQueryWrapper<Expert>().eq(Expert::getExpertName, createExpertDto.getExpertName())
+                .eq(Expert::getExpertDeptment, createExpertDto.getExpertDeptment())
+                .eq(Expert::getExpertDec, createExpertDto.getExpertDec());
+        Expert one = expertMapper.selectOne(wrapper);
+
+        Long expertId = null;
+
+        if(one == null){
+            //添加专家
+            Expert expert = new Expert();
+            BeanUtils.copyProperties(createExpertDto, expert);
+            int insert = expertMapper.insert(expert);
+            if(insert > 0){
+                expertId = expert.getId(); //主键回显
+            }else{
+                return AjaxResult.error(orgName + "添加专家结点失败");
+            }
+        }else{
+            expertId = one.getId();
+        }
+
+        //添加专家和机构关系，先查询是否已经存在该关系，没有再添加
+
+        //根据机构名称取到机构id
+        Organization organization = organizationMapper.selectOne(new LambdaQueryWrapper<Organization>().eq(Organization::getOrgName, orgName));
+        long orgId = organization.getId();
+
+        Relationship relationship = new Relationship();
+        Integer category = createExpertDto.getCategory();
+        relationship.setCategory(category);
+        relationship.setOrgId(orgId);
+        relationship.setExpertId(expertId);
+
+        LambdaQueryWrapper<Relationship> wrapper1 = new LambdaQueryWrapper<Relationship>().eq(Relationship::getExpertId, expertId)
+                .eq(Relationship::getOrgId, orgId)
+                .eq(Relationship::getCategory, category);
+        Relationship selectOne = relationshipMapper.selectOne(wrapper1); //查询关系
+
+        if(selectOne != null){
+            return AjaxResult.success("该专家和该机构已存在该合作关系");
+        }
+        int insert = relationshipMapper.insert(relationship);
+        if(insert > 0){
+            return AjaxResult.success(orgName +"添加专家及合作关系成功");
+        }
+
+        return AjaxResult.error(orgName +"添加专家及合作关系失败");
     }
 }

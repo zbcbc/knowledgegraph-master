@@ -5,6 +5,7 @@ import com.knowledgegraph.common.core.domain.AjaxResult;
 import com.knowledgegraph.neo4j.pojo.Coagreement;
 import com.knowledgegraph.neo4j.pojo.Organization;
 import com.knowledgegraph.neo4j.pojo.Relationship;
+import com.knowledgegraph.neo4j.result.dto.CreateExpertDto;
 import com.knowledgegraph.neo4j.result.dto.OrganizationDto;
 import com.knowledgegraph.neo4j.result.vo.CoagreementVO;
 import com.knowledgegraph.neo4j.service.ICoagreementService;
@@ -107,6 +108,12 @@ public class OrganizationController {
     @DeleteMapping("/{orgId}")
     public AjaxResult deleteOrganization(@PathVariable Long orgId){
         return iOrganizationService.deleteOrganization(orgId);
+    }
+
+    @ApiOperation("增加该机构的专家结点")
+    @PostMapping("/createExpert")
+    public AjaxResult createExpertWithOrg(@RequestBody CreateExpertDto createExpertDto){
+        return iOrganizationService.createExpertWithOrg(createExpertDto);
     }
 
 
