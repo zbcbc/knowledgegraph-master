@@ -3,6 +3,7 @@ package com.knowledgegraph.neo4j.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.knowledgegraph.common.core.domain.AjaxResult;
 import com.knowledgegraph.neo4j.pojo.Expert;
+import com.knowledgegraph.neo4j.result.dto.CreateAreaDto;
 
 /**
  * ClassName: IExpertService
@@ -17,4 +18,6 @@ public interface IExpertService extends IService<Expert> {
     AjaxResult deleteExpert(Long expertId);
 
     AjaxResult deleteAreaWithExpert(Long expertId, Long researchAreaId);
+
+    AjaxResult createAreaWithExpert(CreateAreaDto createAreaDto);
 }

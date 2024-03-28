@@ -4,10 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.knowledgegraph.common.core.domain.AjaxResult;
 import com.knowledgegraph.neo4j.mapper.*;
-import com.knowledgegraph.neo4j.pojo.Expert;
-import com.knowledgegraph.neo4j.pojo.ExpertAreas;
-import com.knowledgegraph.neo4j.pojo.ExpertPaper;
-import com.knowledgegraph.neo4j.pojo.Relationship;
+import com.knowledgegraph.neo4j.pojo.*;
+import com.knowledgegraph.neo4j.result.dto.CreateAreaDto;
 import com.knowledgegraph.neo4j.service.IExpertService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +38,7 @@ public class ExpertServiceImpl extends ServiceImpl<ExpertMapper, Expert> impleme
     ExpertMapper expertMapper;
     @Autowired
     ResearchAreasMapper researchAreasMapper;
+
 
     /**
      * 删除专家
@@ -85,6 +84,53 @@ public class ExpertServiceImpl extends ServiceImpl<ExpertMapper, Expert> impleme
             researchAreasMapper.deleteById(researchAreaId);
         }
         return AjaxResult.success("删除成功");
+    }
+
+    /**
+     * 增加该专家的研究方向
+     * @param createAreaDto
+     * @return
+     */
+    @Transactional
+    @Override
+    public AjaxResult createAreaWithExpert(CreateAreaDto createAreaDto) {
+        String areaName = createAreaDto.getAreaName();
+        Long expertId = createAreaDto.getExpertId();
+
+        //查询研究方向表中是否存在该研究方向
+        ResearchAreas area = researchAreasMapper.selectOne(new LambdaQueryWrapper<ResearchAreas>().eq(ResearchAreas::getAreaName, areaName));
+
+        //不存在 新增area表
+        Long areaId = null;
+        if(area == null){
+            ResearchAreas area1 = new ResearchAreas();
+            area1.setAreaName(areaName);
+            int i = researchAreasMapper.insert(area1);
+            if(i <= 0){
+                return AjaxResult.error("新增研究方向结点‘" + areaName + "’失败!");
+            }
+            areaId = area1.getId();
+        }else{
+            areaId = area.getId();
+        }
+
+        //查询该专家是否已存在该研究方向
+        ExpertAreas expertAreas = expertAreasMapper.selectOne(new LambdaQueryWrapper<ExpertAreas>().eq(ExpertAreas::getExpertId, expertId)
+                .eq(ExpertAreas::getResearchAreaId, areaId));
+        //不存在 新增expert_area关系表
+        if(expertAreas == null){
+            ExpertAreas expertAreas1 = new ExpertAreas();
+            expertAreas1.setExpertId(expertId);
+            expertAreas1.setResearchAreaId(areaId);
+            int i = expertAreasMapper.insert(expertAreas1);
+            if(i <= 0){
+                return AjaxResult.error("该专家新增研究方向‘" + areaName + "’失败!");
+            }
+        }else{
+            return AjaxResult.error("该专家已存在研究方向‘" + areaName + "’,无需添加!");
+        }
+
+        return AjaxResult.success("该专家新增研究方向‘" + areaName + "’成功!");
     }
 
 }

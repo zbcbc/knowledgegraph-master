@@ -4,6 +4,7 @@ import com.knowledgegraph.common.core.domain.AjaxResult;
 import com.knowledgegraph.neo4j.pojo.Expert;
 import com.knowledgegraph.neo4j.pojo.Organization;
 import com.knowledgegraph.neo4j.pojo.Relationship;
+import com.knowledgegraph.neo4j.result.dto.CreateAreaDto;
 import com.knowledgegraph.neo4j.result.dto.CreateExpertDto;
 import com.knowledgegraph.neo4j.result.dto.OrganizationDto;
 import com.knowledgegraph.neo4j.service.IExpertService;
@@ -45,10 +46,11 @@ public class ExpertController {
         }
     }
 
-    //todo:设计DTO类，编写业务层代码 具体待定
-    @ApiOperation("增加专家结点以及该专家的研究方向、论文")
-    public AjaxResult createExpertWithAreaPaper(@RequestBody CreateExpertDto createExpertDto){
-        return null;
+
+    @ApiOperation("增加该专家的研究方向")
+    @PostMapping("createArea")
+    public AjaxResult createAreaWithExpert(@RequestBody CreateAreaDto createAreaDto){
+        return iExpertService.createAreaWithExpert(createAreaDto);
     }
 
     @ApiOperation("删除专家结点")

@@ -15,6 +15,7 @@ import lombok.ToString;
 @Data
 
 public class ExpertAreas implements Serializable {
+    @TableId(value = "id")
     private Long id;
 
     private Long expertId;

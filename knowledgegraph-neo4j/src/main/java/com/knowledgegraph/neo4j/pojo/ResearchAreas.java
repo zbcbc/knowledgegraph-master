@@ -15,6 +15,7 @@ import lombok.ToString;
 @Data
 @ToString
 public class ResearchAreas implements Serializable {
+    @TableId(value = "id")
     private Long id;
 
     private String areaName;
