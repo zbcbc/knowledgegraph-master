@@ -1,5 +1,6 @@
 package com.knowledgegraph.neo4j.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import lombok.Data;
@@ -10,6 +11,7 @@ import lombok.Data;
 @TableName(value ="paper")
 @Data
 public class Paper implements Serializable {
+    @TableId(value = "id")
     private Long id;
 
     private String title;

@@ -1,7 +1,9 @@
 package com.knowledgegraph.neo4j.service;
 
+import com.knowledgegraph.common.core.domain.AjaxResult;
 import com.knowledgegraph.neo4j.pojo.ResearchAreas;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.knowledgegraph.neo4j.result.dto.CreatePaperDto;
 
 /**
 * @author zbc
@@ -10,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface ResearchAreasService extends IService<ResearchAreas> {
 
+    AjaxResult createPaperWithExpertAndArea(CreatePaperDto createPaperDto);
 }

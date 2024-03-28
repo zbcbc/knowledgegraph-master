@@ -13,11 +13,14 @@ import lombok.Data;
 @TableName(value ="expert_paper")
 @Data
 public class ExpertPaper implements Serializable {
+    @TableId(value = "id")
     private Long id;
 
     private Long expertId;
 
     private Long paperId;
+
+    private Long areaId;
 
     private static final long serialVersionUID = 1L;
 

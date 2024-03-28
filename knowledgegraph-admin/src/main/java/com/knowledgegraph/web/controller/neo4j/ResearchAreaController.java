@@ -5,6 +5,7 @@ import com.knowledgegraph.neo4j.pojo.Expert;
 import com.knowledgegraph.neo4j.pojo.ExpertAreas;
 import com.knowledgegraph.neo4j.pojo.Relationship;
 import com.knowledgegraph.neo4j.pojo.ResearchAreas;
+import com.knowledgegraph.neo4j.result.dto.CreatePaperDto;
 import com.knowledgegraph.neo4j.service.ExpertAreasService;
 import com.knowledgegraph.neo4j.service.ResearchAreasService;
 import io.swagger.annotations.Api;
@@ -33,7 +34,7 @@ public class ResearchAreaController {
     @Autowired
     ExpertAreasService expertAreasService;
 
-    @ApiOperation("增加研究方向结点")
+    @ApiOperation("增加研究方向独立结点")
     @PostMapping()
     public AjaxResult createExpert(@RequestBody ResearchAreas researchAreas){
         boolean save = researchAreasService.save(researchAreas);
@@ -42,6 +43,12 @@ public class ResearchAreaController {
         }else {
             return AjaxResult.error("增加研究方向结点失败");
         }
+    }
+
+    @ApiOperation("增加某专家某研究方向下的论文")
+    @PostMapping("/createPaper")
+    public AjaxResult createPaperWithExpertAndArea(@RequestBody CreatePaperDto createPaperDto){
+        return researchAreasService.createPaperWithExpertAndArea(createPaperDto);
     }
 
 
