@@ -18,10 +18,13 @@ import java.util.List;
  */
 @Data
 @ToString
-public class AreaPapersDto extends ResearchAreas {
-    //该方向所属教授id
-    //Long expertId;
+public class AreaPapersDto{
+    //随机数id 区分同名节点
+    private Long id;
 
+    private Long areaId;
+
+    private String areaName;
     //该方向下的论文
     List<Paper> paperList;
 }

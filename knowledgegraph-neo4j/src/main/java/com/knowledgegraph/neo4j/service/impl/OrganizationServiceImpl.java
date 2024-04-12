@@ -157,11 +157,13 @@ public class OrganizationServiceImpl extends ServiceImpl<OrganizationMapper, Org
             if (areaList != null && !areaList.isEmpty() && areaList.get(0) != null) {
                 areaList.forEach(areaPapersDto -> {
                     //areaPapersDto.setExpertId(expertId); //结点唯一
+                    areaPapersDto.setAreaId(areaPapersDto.getId());
                     UUID uuid = UUID.randomUUID();
                     Long uniqueAreaId = uuid.getMostSignificantBits();
-                    //areaPapersDto.setId(uniqueAreaId);
-                    List<Paper> papers = paperMapper.queryPaperByExpertIdAndAreaId(expertId, areaPapersDto.getId());
                     areaPapersDto.setId(uniqueAreaId);
+                    List<Paper> papers = paperMapper.queryPaperByExpertIdAndAreaId(expertId, areaPapersDto.getAreaId());
+                    //areaPapersDto.setId(uniqueAreaId);
+
                     if (papers != null && !papers.isEmpty() && papers.get(0) != null) {
                         areaPapersDto.setPaperList(papers); //将该论文list封装到areaDto
                     }

@@ -58,6 +58,7 @@ public class ResearchAreasServiceImpl extends ServiceImpl<ResearchAreasMapper, R
         Paper paper = paperMapper.selectOne(new LambdaQueryWrapper<Paper>().eq(Paper::getTitle, title)
                 .eq(Paper::getPublicationYear, publicationYear)
                 .eq(Paper::getConferenceJournal, journal));
+
         Long paperId = null;
         if(paper == null){
             Paper paper1 = new Paper();
