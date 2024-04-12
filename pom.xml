@@ -218,6 +218,7 @@
                 <artifactId>knowledgegraph-common</artifactId>
                 <version>${knowledgegraph.version}</version>
             </dependency>
+    <!-- 
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
@@ -229,6 +230,7 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+    -->
         </dependencies>
     </dependencyManagement>
 
