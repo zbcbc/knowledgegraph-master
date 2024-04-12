@@ -16,9 +16,10 @@ com\knowledgegraph\web\controller\neo4j\GraphApplyController.class
 com\knowledgegraph\web\controller\neo4j\GraphMemberController.class
 com\knowledgegraph\web\controller\neo4j\GraphRelationshipController.class
 com\knowledgegraph\web\controller\monitor\ServerController.class
-com\knowledgegraph\web\controller\neo4j\OrganizationBasedController.class
+com\knowledgegraph\web\controller\neo4j\ResearchAreaController.class
 com\knowledgegraph\web\controller\neo4j\DataStatisticsController.class
 com\knowledgegraph\web\controller\system\SysNoticeController.class
+com\knowledgegraph\web\controller\neo4j\ExpertController.class
 com\knowledgegraph\web\controller\system\SysDeptController.class
 com\knowledgegraph\web\controller\system\SysRegisterController.class
 com\knowledgegraph\web\controller\system\SysDictDataController.class
@@ -34,4 +35,6 @@ com\knowledgegraph\KnowledgeGraphServletInitializer.class
 com\knowledgegraph\web\controller\monitor\SysLogininforController.class
 com\knowledgegraph\web\controller\system\SysRoleController.class
 com\knowledgegraph\web\controller\monitor\SysUserOnlineController.class
+com\knowledgegraph\web\controller\neo4j\OrganizationController.class
+com\knowledgegraph\web\controller\neo4j\PaperController.class
 com\knowledgegraph\web\controller\system\SysConfigController.class
