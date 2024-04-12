@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowledgegraph.neo4j.mapper.GraphApplyMapper">
+    
+    <resultMap type="GraphApply" id="GraphApplyResult">
+        <result property="applyKey"    column="apply_key"    />
+        <result property="applyUser"    column="apply_user"    />
+        <result property="graphKey"    column="graph_key"    />
+        <result property="applyUserName"    column="apply_user_name"    />
+        <result property="graphName"    column="graph_name"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="applyRemark"    column="apply_remark"    />
+        <result property="applySign"    column="apply_sign"    />
+        <result property="applyFlag"    column="apply_flag"    />
+        <result property="examineTime"    column="examine_time"    />
+        <result property="examineRemark"    column="examine_remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deleteFlag"    column="delete_flag"    />
+    </resultMap>
+
+    <sql id="selectGraphApplyVo">
+        SELECT
+            A.apply_key,
+            A.apply_user,
+            A.graph_key,
+            C.nick_name AS apply_user_name,
+            B.graph_name,
+            A.apply_time,
+            A.apply_remark,
+            A.apply_sign,
+            A.apply_flag,
+            A.examine_time,
+            A.examine_remark,
+            A.create_by,
+            A.create_time,
+            A.update_by,
+            A.update_time,
+            A.delete_flag
+        FROM
+            graph_apply A
+                LEFT JOIN graph B ON A.graph_key = B.graph_key
+                LEFT JOIN sys_user C ON  A.apply_user =  C.user_id
+    </sql>
+
+    <select id="selectGraphApplyList" parameterType="GraphApply" resultMap="GraphApplyResult">
+        <include refid="selectGraphApplyVo"/>
+        <where>  
+            <if test="graphKey != null  and graphKey != ''"> and A.graph_key = #{graphKey}</if>
+            <if test="graphName != null  and graphName != ''"> and B.graph_name like concat('%', #{graphName}, '%') </if>
+            <if test="applyUser != null  and applyUser != ''"> and A.apply_user = #{applyUser}</if>
+            <if test="applySign != null  and applySign != ''"> and A.apply_sign = #{applySign}</if>
+            <if test="applyFlag != null  and applyFlag != ''"> and A.apply_flag = #{applyFlag}</if>
+            <if test="createBy != null  and createBy != ''"> and B.create_by = #{createBy}</if>
+        </where>
+        ORDER BY A.apply_time DESC
+    </select>
+    
+    <select id="selectGraphApplyByApplyKey" parameterType="String" resultMap="GraphApplyResult">
+        <include refid="selectGraphApplyVo"/>
+        where A.apply_key = #{applyKey}
+    </select>
+        
+    <insert id="insertGraphApply" parameterType="GraphApply">
+        insert into graph_apply
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="applyKey != null">apply_key,</if>
+            <if test="applyUser != null">apply_user,</if>
+            <if test="graphKey != null">graph_key,</if>
+            <if test="applyTime != null">apply_time,</if>
+            <if test="applyRemark != null">apply_remark,</if>
+            <if test="applySign != null">apply_sign,</if>
+            <if test="applyFlag != null">apply_flag,</if>
+            <if test="examineTime != null">examine_time,</if>
+            <if test="examineRemark != null">examine_remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="deleteFlag != null">delete_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="applyKey != null">#{applyKey},</if>
+            <if test="applyUser != null">#{applyUser},</if>
+            <if test="graphKey != null">#{graphKey},</if>
+            <if test="applyTime != null">#{applyTime},</if>
+            <if test="applyRemark != null">#{applyRemark},</if>
+            <if test="applySign != null">#{applySign},</if>
+            <if test="applyFlag != null">#{applyFlag},</if>
+            <if test="examineTime != null">#{examineTime},</if>
+            <if test="examineRemark != null">#{examineRemark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="deleteFlag != null">#{deleteFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGraphApply" parameterType="GraphApply">
+        update graph_apply
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="applyUser != null">apply_user = #{applyUser},</if>
+            <if test="graphKey != null">graph_key = #{graphKey},</if>
+            <if test="applyTime != null">apply_time = #{applyTime},</if>
+            <if test="applyRemark != null">apply_remark = #{applyRemark},</if>
+            <if test="applySign != null">apply_sign = #{applySign},</if>
+            <if test="applyFlag != null">apply_flag = #{applyFlag},</if>
+            <if test="examineTime != null">examine_time = #{examineTime},</if>
+            <if test="examineRemark != null">examine_remark = #{examineRemark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="deleteFlag != null">delete_flag = #{deleteFlag},</if>
+        </trim>
+        where apply_key = #{applyKey}
+    </update>
+
+    <delete id="deleteGraphApplyByApplyKey" parameterType="String">
+        delete from graph_apply where apply_key = #{applyKey}
+    </delete>
+
+    <delete id="deleteGraphApplyByApplyKeys" parameterType="String">
+        delete from graph_apply where apply_key in 
+        <foreach item="applyKey" collection="array" open="(" separator="," close=")">
+            #{applyKey}
+        </foreach>
+    </delete>
+</mapper>

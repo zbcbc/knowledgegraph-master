@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowledgegraph.neo4j.mapper.GraphNodeMapper">
+    
+    <resultMap type="GraphNode" id="GraphNodeResult">
+        <result property="graphNodeKey"    column="graph_node_key"    />
+        <result property="graphKey"    column="graph_key"    />
+        <result property="graphName"    column="graph_name"    />
+        <result property="graphNodeId"    column="graph_node_id"    />
+        <result property="graphNodeName"    column="graph_node_name"    />
+        <result property="graphNodeMyicon"    column="graph_node_myicon"    />
+        <result property="graphNodeRemark"    column="graph_node_remark"    />
+        <result property="graphNodeUpdate"    column="graph_node_update"    />
+        <result property="graphNodeUrl"    column="graph_node_url"    />
+        <result property="graphNodeTime"    column="graph_node_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deleteFlag"    column="delete_flag"    />
+    </resultMap>
+
+    <sql id="selectGraphNodeVo">
+        SELECT
+            A.graph_node_key,
+            A.graph_key,
+            B.graph_name,
+            A.graph_node_id,
+            A.graph_node_name,
+            A.graph_node_myicon,
+            A.graph_node_remark,
+            A.graph_node_update,
+            A.graph_node_url,
+            A.graph_node_time,
+            A.create_by,
+            A.create_time,
+            A.update_by,
+            A.update_time,
+            A.delete_flag
+        FROM
+            graph_node A
+                LEFT JOIN graph B ON A.graph_key = B.graph_key
+    </sql>
+
+    <select id="selectGraphNodeList" parameterType="GraphNode" resultMap="GraphNodeResult">
+        <include refid="selectGraphNodeVo"/>
+        <where>  
+            <if test="graphKey != null  and graphKey != ''"> and A.graph_key = #{graphKey}</if>
+            <if test="graphNodeId != null "> and A.graph_node_id = #{graphNodeId}</if>
+            <if test="graphNodeName != null  and graphNodeName != ''"> and A.graph_node_name like concat('%', #{graphNodeName}, '%')</if>
+        </where>
+        ORDER BY A.create_time DESC
+    </select>
+    
+    <select id="selectGraphNodeByGraphNodeKey" parameterType="String" resultMap="GraphNodeResult">
+        <include refid="selectGraphNodeVo"/>
+        where A.graph_node_key = #{graphNodeKey}
+    </select>
+        
+    <insert id="insertGraphNode" parameterType="GraphNode">
+        insert into graph_node
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="graphNodeKey != null">graph_node_key,</if>
+            <if test="graphKey != null">graph_key,</if>
+            <if test="graphNodeId != null">graph_node_id,</if>
+            <if test="graphNodeName != null">graph_node_name,</if>
+            <if test="graphNodeMyicon != null">graph_node_myicon,</if>
+            <if test="graphNodeRemark != null">graph_node_remark,</if>
+            <if test="graphNodeUpdate != null">graph_node_update,</if>
+            <if test="graphNodeUrl != null">graph_node_url,</if>
+            <if test="graphNodeTime != null">graph_node_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="deleteFlag != null">delete_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="graphNodeKey != null">#{graphNodeKey},</if>
+            <if test="graphKey != null">#{graphKey},</if>
+            <if test="graphNodeId != null">#{graphNodeId},</if>
+            <if test="graphNodeName != null">#{graphNodeName},</if>
+            <if test="graphNodeMyicon != null">#{graphNodeMyicon},</if>
+            <if test="graphNodeRemark != null">#{graphNodeRemark},</if>
+            <if test="graphNodeUpdate != null">#{graphNodeUpdate},</if>
+            <if test="graphNodeUrl != null">#{graphNodeUrl},</if>
+            <if test="graphNodeTime != null">#{graphNodeTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="deleteFlag != null">#{deleteFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGraphNode" parameterType="GraphNode">
+        update graph_node
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="graphKey != null">graph_key = #{graphKey},</if>
+            <if test="graphNodeId != null">graph_node_id = #{graphNodeId},</if>
+            <if test="graphNodeName != null">graph_node_name = #{graphNodeName},</if>
+            <if test="graphNodeMyicon != null">graph_node_myicon = #{graphNodeMyicon},</if>
+            <if test="graphNodeRemark != null">graph_node_remark = #{graphNodeRemark},</if>
+
+            <if test="graphNodeUrl != null">graph_node_url = #{graphNodeUrl},</if>
+            <if test="graphNodeTime != null">graph_node_time = #{graphNodeTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="deleteFlag != null">delete_flag = #{deleteFlag},</if>
+            graph_node_update = graph_node_update + 1
+        </trim>
+        where graph_node_key = #{graphNodeKey}
+    </update>
+
+    <delete id="deleteGraphNodeByGraphNodeKey" parameterType="String">
+        delete from graph_node where graph_node_key = #{graphNodeKey}
+    </delete>
+
+    <delete id="deleteGraphNodeByGraphNodeKeys" parameterType="String">
+        delete from graph_node where graph_node_key in 
+        <foreach item="graphNodeKey" collection="array" open="(" separator="," close=")">
+            #{graphNodeKey}
+        </foreach>
+    </delete>
+</mapper>

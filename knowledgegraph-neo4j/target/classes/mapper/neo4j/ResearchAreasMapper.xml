@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowledgegraph.neo4j.mapper.ResearchAreasMapper">
+
+    <resultMap id="BaseResultMap" type="com.knowledgegraph.neo4j.pojo.ResearchAreas">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="areaName" column="area_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,area_name
+    </sql>
+
+
+    <select id="queryAreasByExpertId" resultType="com.knowledgegraph.neo4j.result.dto.AreaPapersDto">
+        SELECT a.id,a.area_name
+        FROM
+            expert as e
+                LEFT JOIN expert_areas as r ON e.ID = r.expert_id
+                LEFT JOIN research_areas as a ON r.research_area_id = a.id
+        where e.ID = #{expertId}
+
+    </select>
+
+
+</mapper>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowledgegraph.neo4j.mapper.GraphMemberMapper">
+    
+    <resultMap type="GraphMember" id="GraphMemberResult">
+        <result property="graphMemberKey"    column="graph_member_key"    />
+        <result property="userKey"    column="user_key"    />
+        <result property="graphKey"    column="graph_key"    />
+        <result property="userName"    column="userName"    />
+        <result property="graphName"    column="graphName"    />
+        <result property="contributionValue"    column="contribution_value"    />
+        <result property="joinTime"    column="join_time"    />
+        <result property="graphMemberType"    column="graph_member_type"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deleteFlag"    column="delete_flag"    />
+    </resultMap>
+
+    <sql id="selectGraphMemberVo">
+        SELECT
+            A.graph_member_key,
+            A.user_key,
+            A.graph_key,
+            A.contribution_value,
+            A.join_time,
+            A.graph_member_type,
+            A.create_by,
+            A.create_time,
+            A.update_by,
+            A.update_time,
+            A.delete_flag,
+            C.graph_name AS graphName,
+            B.nick_name AS userName
+        FROM
+            graph_member A
+                LEFT JOIN sys_user B ON A.user_key = B.user_id
+                LEFT JOIN graph C ON C.graph_key = A.graph_key
+    </sql>
+
+    <select id="selectGraphMemberList" parameterType="GraphMember" resultMap="GraphMemberResult">
+        <include refid="selectGraphMemberVo"/>
+        <where>  
+            <if test="userKey != null  and userKey != ''"> and A.user_key = #{userKey}</if>
+            <if test="userName != null  and userName != ''"> and B.nick_name like concat('%', #{userName}, '%')</if>
+            <if test="graphKey != null  and graphKey != ''"> and A.graph_key = #{graphKey}</if>
+            <if test="createBy != null  and createBy != ''"> and C.create_by = #{createBy}</if>
+            <if test="graphMemberType != null  and graphMemberType != ''"> and A.graph_member_type = #{graphMemberType}</if>
+        </where>
+        ORDER BY A.create_time DESC
+    </select>
+    
+    <select id="selectGraphMemberByGraphMemberKey" parameterType="String" resultMap="GraphMemberResult">
+        <include refid="selectGraphMemberVo"/>
+        where A.graph_member_key = #{graphMemberKey}
+    </select>
+        
+    <insert id="insertGraphMember" parameterType="GraphMember">
+        insert into graph_member
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="graphMemberKey != null">graph_member_key,</if>
+            <if test="userKey != null">user_key,</if>
+            <if test="graphKey != null">graph_key,</if>
+            <if test="contributionValue != null">contribution_value,</if>
+            <if test="joinTime != null">join_time,</if>
+            <if test="graphMemberType != null">graph_member_type,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="deleteFlag != null">delete_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="graphMemberKey != null">#{graphMemberKey},</if>
+            <if test="userKey != null">#{userKey},</if>
+            <if test="graphKey != null">#{graphKey},</if>
+            <if test="contributionValue != null">#{contributionValue},</if>
+            <if test="joinTime != null">#{joinTime},</if>
+            <if test="graphMemberType != null">#{graphMemberType},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="deleteFlag != null">#{deleteFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGraphMember" parameterType="GraphMember">
+        update graph_member
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userKey != null">user_key = #{userKey},</if>
+            <if test="graphKey != null">graph_key = #{graphKey},</if>
+            <if test="contributionValue != null">contribution_value = #{contributionValue},</if>
+            <if test="joinTime != null">join_time = #{joinTime},</if>
+            <if test="graphMemberType != null">graph_member_type = #{graphMemberType},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="deleteFlag != null">delete_flag = #{deleteFlag},</if>
+        </trim>
+        where graph_member_key = #{graphMemberKey}
+    </update>
+
+    <update id="updateGraphMemberContributionValue"  parameterType="GraphMember">
+        UPDATE graph_member
+        SET
+            contribution_value = contribution_value + 1
+        WHERE user_key = #{userKey}
+          AND graph_key = #{graphKey};
+    </update>
+
+    <delete id="deleteGraphMemberByGraphMemberKey" parameterType="String">
+        delete from graph_member where graph_member_key = #{graphMemberKey}
+    </delete>
+
+    <delete id="deleteGraphMemberByGraphMemberKeys" parameterType="String">
+        delete from graph_member where graph_member_key in 
+        <foreach item="graphMemberKey" collection="array" open="(" separator="," close=")">
+            #{graphMemberKey}
+        </foreach>
+    </delete>
+</mapper>
